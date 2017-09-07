@@ -1,0 +1,17 @@
+.idea
+*.o
+*.pyc
+*.npy
+*.ckpt
+*.tar
+*.out
+*.tar.gz
+*.so
+experiments/logs/*
+experiments/eval/*
+data/cache/*
+data/pretrain_model
+data/VOC*
+output
+logs
+utest
