@@ -1,6 +1,17 @@
 # RetinaNet
 -----------------
 
+`sigmoid + special bias initialization` version training code has been
+released.
+
+end2end training:
+
+nohup ./experiments/scripts/sigmoid_RetinaNet_end2end.sh 0 sigmoid_RetinaNet pascal_voc0712 --set
+RNG_SEED 42 TRAIN.SCALES "[600]" > sigmoid_RetinaNet.log 2>&1 &
+
+----------------
+
+
 `softmax + gradient clipping` version
 end2end testing:
 [mAP(0.6813)](https://drive.google.com/open?id=0B_qzepxA9F3vSExWMG8xX2x2aUE)
