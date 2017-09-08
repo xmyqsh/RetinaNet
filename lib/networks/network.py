@@ -580,7 +580,9 @@ class Network(object):
 
         gamma_tf = tf.scalar_mul(gamma, tf.ones_like(pt, tf.float32))
         #alpha_tf = tf.map_fn(lambda x: 1.0 - alpha if x == 0 else alpha, label_one_hot, dtype=tf.float32)
-        alpha_tf = 1.0
+        alpha_tf = tf.scalar_mul(alpha, tf.ones_like(pt, tf.float32))
+        alpha_tf = tf.where(tf.equal(label_one_hot, 1.0), alpha_tf, 1.0 - alpha_tf)
+        #alpha_tf = 1.0
 
         cls_loss = alpha_tf*(-1.0 * tf.pow(1 - pt, gamma_tf) * tf.log(pt))
 
