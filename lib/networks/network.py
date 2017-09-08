@@ -575,5 +575,13 @@ class Network(object):
         return cls_loss
 
     def focal_loss_sigmoid(self, pred, label, num_class=20, alpha=0.25, gamma=2.0):
-        # TODO:
-        pass
+        label_one_hot = tf.one_hot(indices=label - 1, depth=num_class, on_value=1.0, off_value=0.0, axis=-1, dtype=tf.float32)
+        pt = tf.where(tf.equal(label_one_hot, 1.0), pred, 1.0 - pred)
+
+        gamma_tf = tf.scalar_mul(gamma, tf.ones_like(pt, tf.float32))
+        #alpha_tf = tf.map_fn(lambda x: 1.0 - alpha if x == 0 else alpha, label_one_hot, dtype=tf.float32)
+        alpha_tf = 1.0
+
+        cls_loss = alpha_tf*(-1.0 * tf.pow(1 - pt, gamma_tf) * tf.log(pt))
+
+        return cls_loss

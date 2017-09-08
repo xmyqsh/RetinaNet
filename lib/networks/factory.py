@@ -10,6 +10,7 @@
 __sets = {}
 
 from .RetinaNet_train_test import RetinaNet_train_test
+from .sigmoid_RetinaNet_train_test import sigmoid_RetinaNet_train_test
 
 def get_network(name):
     """Get a network by name."""
@@ -18,6 +19,8 @@ def get_network(name):
            return RetinaNet_train_test()
         else:
            raise KeyError('Unknown dataset: {}'.format(name))
+    elif name.split('_')[0] == 'sigmoid':
+        return sigmoid_RetinaNet_train_test()
     else:
         raise KeyError('Unknown dataset: {}'.format(name))
 

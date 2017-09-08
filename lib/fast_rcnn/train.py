@@ -135,7 +135,7 @@ class SolverWrapper(object):
             opt = tf.train.MomentumOptimizer(lr, momentum)
 
         global_step = tf.Variable(0, trainable=False)
-        with_clip = True
+        with_clip = True if self.net.name == 'RetinaNet_train_test' else False
         if with_clip:
             trainable_vars = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, 'res3_5')
             trainable_vars += tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, 'Top-Down')

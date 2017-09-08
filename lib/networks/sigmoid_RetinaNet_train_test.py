@@ -11,9 +11,9 @@ from .network import Network
 from ..fast_rcnn.config import cfg
 
 
-class RetinaNet_train_test(Network):
+class sigmoid_RetinaNet_train_test(Network):
     def __init__(self, trainable=True):
-        self.name = 'RetinaNet_train_test'
+        self.name = 'sigmoid_RetinaNet_train_test'
         self.inputs = []
         self.data = tf.placeholder(tf.float32, shape=[None, None, None, 3], name='data')
         self.im_info = tf.placeholder(tf.float32, shape=[None, 3], name='im_info')
@@ -27,9 +27,9 @@ class RetinaNet_train_test(Network):
 
     def setup(self):
 
-        n_classes = cfg.NCLASSES
-        #pi = 0.01
-        pi = 0.0001
+        n_classes = cfg.NCLASSES - 1
+        pi = 0.01
+        #pi = 0.0001
         num_anchor_ratio = 3 # 1:2, 1:1, 2:1
         num_anchor_scale = 3 # 2**0, 2**(1/3), 2**(2/3)
         num_anchor = num_anchor_ratio * num_anchor_scale
@@ -284,10 +284,10 @@ class RetinaNet_train_test(Network):
                  .conv(3,3,256,1,1,name='cls_conv_2/P3',reuse=True)
                  .conv(3,3,256,1,1,name='cls_conv_3/P3',reuse=True)
                  .conv(3,3,256,1,1,name='cls_conv_4/P3',reuse=True)
-                 .conv(3,3,num_anchor*n_classes,1,1,cls_final=True,bias_init=-np.log((1-pi)/pi),relu=False,name='cls_score/P3',reuse=True)
+                 .conv(3,3,num_anchor*n_classes,1,1,cls_final=False,bias_init=-np.log((1-pi)/pi),relu=False,name='cls_score/P3',reuse=True)
                  #.conv(3,3,num_anchor*n_classes,1,1,relu=False,name='cls_score/P3',reuse=True)
                  .reshape_layer([-1, n_classes],name='cls_score_reshape/P3')
-                 .softmax(name='cls_prob/P3'))
+                 .sigmoid(name='cls_prob/P3'))
 
             scope.reuse_variables()
 
@@ -296,48 +296,56 @@ class RetinaNet_train_test(Network):
                  .conv(3,3,256,1,1,name='cls_conv_2/P4',reuse=True)
                  .conv(3,3,256,1,1,name='cls_conv_3/P4',reuse=True)
                  .conv(3,3,256,1,1,name='cls_conv_4/P4',reuse=True)
-                 .conv(3,3,num_anchor*n_classes,1,1,cls_final=True,bias_init=-np.log((1-pi)/pi),relu=False,name='cls_score/P4',reuse=True)
+                 .conv(3,3,num_anchor*n_classes,1,1,cls_final=False,bias_init=-np.log((1-pi)/pi),relu=False,name='cls_score/P4',reuse=True)
                  #.conv(3,3,num_anchor*n_classes,1,1,relu=False,name='cls_score/P4',reuse=True)
                  .reshape_layer([-1, n_classes],name='cls_score_reshape/P4')
-                 .softmax(name='cls_prob/P4'))
+                 .sigmoid(name='cls_prob/P4'))
 
             (self.feed('P5')
                  .conv(3,3,256,1,1,name='cls_conv_1/P5',reuse=True)
                  .conv(3,3,256,1,1,name='cls_conv_2/P5',reuse=True)
                  .conv(3,3,256,1,1,name='cls_conv_3/P5',reuse=True)
                  .conv(3,3,256,1,1,name='cls_conv_4/P5',reuse=True)
-                 .conv(3,3,num_anchor*n_classes,1,1,cls_final=True,bias_init=-np.log((1-pi)/pi),relu=False,name='cls_score/P5',reuse=True)
+                 .conv(3,3,num_anchor*n_classes,1,1,cls_final=False,bias_init=-np.log((1-pi)/pi),relu=False,name='cls_score/P5',reuse=True)
                  #.conv(3,3,num_anchor*n_classes,1,1,relu=False,name='cls_score/P5',reuse=True)
                  .reshape_layer([-1, n_classes],name='cls_score_reshape/P5')
-                 .softmax(name='cls_prob/P5'))
+                 .sigmoid(name='cls_prob/P5'))
 
             (self.feed('P6')
                  .conv(3,3,256,1,1,name='cls_conv_1/P6',reuse=True)
                  .conv(3,3,256,1,1,name='cls_conv_2/P6',reuse=True)
                  .conv(3,3,256,1,1,name='cls_conv_3/P6',reuse=True)
                  .conv(3,3,256,1,1,name='cls_conv_4/P6',reuse=True)
-                 .conv(3,3,num_anchor*n_classes,1,1,cls_final=True,bias_init=-np.log((1-pi)/pi),relu=False,name='cls_score/P6',reuse=True)
+                 .conv(3,3,num_anchor*n_classes,1,1,cls_final=False,bias_init=-np.log((1-pi)/pi),relu=False,name='cls_score/P6',reuse=True)
                  #.conv(3,3,num_anchor*n_classes,1,1,relu=False,name='cls_score/P6',reuse=True)
                  .reshape_layer([-1, n_classes],name='cls_score_reshape/P6')
-                 .softmax(name='cls_prob/P6'))
+                 .sigmoid(name='cls_prob/P6'))
 
             (self.feed('P7')
                  .conv(3,3,256,1,1,name='cls_conv_1/P7',reuse=True)
                  .conv(3,3,256,1,1,name='cls_conv_2/P7',reuse=True)
                  .conv(3,3,256,1,1,name='cls_conv_3/P7',reuse=True)
                  .conv(3,3,256,1,1,name='cls_conv_4/P7',reuse=True)
-                 .conv(3,3,num_anchor*n_classes,1,1,cls_final=True,bias_init=-np.log((1-pi)/pi),relu=False,name='cls_score/P7',reuse=True)
+                 .conv(3,3,num_anchor*n_classes,1,1,cls_final=False,bias_init=-np.log((1-pi)/pi),relu=False,name='cls_score/P7',reuse=True)
                  #.conv(3,3,num_anchor*n_classes,1,1,relu=False,name='cls_score/P7',reuse=True)
                  .reshape_layer([-1, n_classes],name='cls_score_reshape/P7')
-                 .softmax(name='cls_prob/P7'))
+                 .sigmoid(name='cls_prob/P7'))
 
+            '''
             (self.feed('cls_score_reshape/P3',
                        'cls_score_reshape/P4',
                        'cls_score_reshape/P5',
                        'cls_score_reshape/P6',
                        'cls_score_reshape/P7')
                  .concat(0, name = 'cls_score_reshape_concat'))
+            '''
 
+            (self.feed('cls_prob/P3',
+                       'cls_prob/P4',
+                       'cls_prob/P5',
+                       'cls_prob/P6',
+                       'cls_prob/P7')
+                 .concat(0, name = 'cls_prob_concat'))
 
         with tf.variable_scope('boxSubNet') as scope:
 
@@ -402,7 +410,7 @@ class RetinaNet_train_test(Network):
 
     def build_loss(self):
         ############# RPN
-        cls_score = self.get_output('cls_score_reshape_concat') # shape(sum(HxWxA), 2)
+        cls_prob = self.get_output('cls_prob_concat') # shape(sum(HxWxA), 2)
         bbox_pred = self.get_output('box_pred_reshape_concat') # shape (sum(HxWxA), 4)
 
         label = tf.reshape(self.get_output('rpn-data')[0], [-1])  # shape (HxWxA)
@@ -414,8 +422,7 @@ class RetinaNet_train_test(Network):
         fg_keep = tf.where(tf.greater(label, 0))
         keep = tf.where(tf.not_equal(label, -1))
 
-        #cls_score = tf.reshape(tf.gather(cls_score, keep), [-1, n_classes]) # shape (N, n_classes)
-        cls_score = tf.reshape(tf.gather(cls_score, keep), [-1, 21]) # shape (N, n_classes)
+        cls_prob = tf.reshape(tf.gather(cls_prob, keep), [-1, cfg.NCLASSES - 1]) # shape (N, n_classes)
         #bbox_pred = tf.reshape(tf.gather(bbox_pred, keep), [-1, 4]) # shape (N, 4)
         bbox_pred = tf.reshape(tf.gather(bbox_pred, fg_keep), [-1, 4]) # shape (N, 4)
 
@@ -429,12 +436,10 @@ class RetinaNet_train_test(Network):
         bbox_outside_weights = tf.reshape(tf.gather(tf.reshape(bbox_outside_weights, [-1, 4]), keep), [-1, 4])
         '''
 
-        #cross_entropy_n = tf.nn.sparse_softmax_cross_entropy_with_logits(logits=cls_score, labels=label)
         #cross_entropy = tf.reduce_mean(cross_entropy_n)
-        cls_prob = tf.nn.softmax(logits=cls_score)
-        focal_loss_n = self.focal_loss(cls_prob, label, num_class=cfg.NCLASSES)
+        focal_loss_n = self.focal_loss_sigmoid(cls_prob, label, num_class=cfg.NCLASSES - 1)
         #cross_entropy = tf.reduce_mean(focal_loss_n)
-        cross_entropy = tf.reduce_sum(focal_loss_n) / (tf.reduce_sum(tf.cast(tf.greater(label, 0), tf.float32)) + 1.0)
+        cross_entropy = tf.reduce_sum(tf.reduce_sum(focal_loss_n, axis=1)) / (tf.reduce_sum(tf.cast(tf.greater(label, 0), tf.float32)) + 1.0)
 
 
         loss_box_n = tf.reduce_sum(self.smooth_l1_dist(
