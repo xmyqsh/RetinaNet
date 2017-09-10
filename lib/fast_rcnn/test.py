@@ -388,13 +388,16 @@ def test_net(sess, net, imdb, weights_filename , max_per_image=1000, thresh=0.05
         print "boxes[0].shape:"
         print boxes[0].shape
 
+        is_sigmoid = True if net.name.startswith('sigmoid') else False
+
         for k in xrange(5):     # P3 ~ P7
             # skip j = 0, because it's the background class
+            #for j in xrange(0, imdb.num_classes - 1):
             for j in xrange(1, imdb.num_classes):
-                inds = np.where(scores[k][:, j] > thresh)[0]
+                inds = np.where(scores[k][:, j - 1 if is_sigmoid else j] > thresh)[0]
                 #print "scores[k][inds, j].shape:"
                 #print scores[k][inds, j].shape
-                cls_scores = scores[k][inds, j]
+                cls_scores = scores[k][inds, j - 1 if is_sigmoid else j]
                 #cls_scores = np.squeeze(scores[k][inds, j])
                 #print "np.squeeze(scores[k][inds, j]).shape:"
                 #print np.squeeze(scores[k][inds, j]).shape
