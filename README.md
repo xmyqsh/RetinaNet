@@ -4,7 +4,9 @@
 `sigmoid + special bias initialization` version training code has been
 released.
 
-end2end testing[mAP(0.6792)]():
+End2end testing:
+[mAP(0.6792)](https://drive.google.com/open?id=0B_qzepxA9F3veE8zY2VaaUpYdjA)
+
 CUDA_VISIBLE_DEVICES=0 python ./tools/test_net.py --gpu 0 --weights
 output/sigmoid_RetinaNet_end2end/voc_0712_trainval/sigmoid_RetinaNet_iter_230000.ckpt
 --imdb voc_0712_test --cfg
